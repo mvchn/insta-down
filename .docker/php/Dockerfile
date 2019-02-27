@@ -32,6 +32,9 @@ RUN apk update && apk upgrade \
     php7-zip \
     php7-pear \
     postgresql-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
     bzip2 \
     bzip2-dev \
     libxml2-dev \
@@ -48,7 +51,8 @@ RUN apk update && apk upgrade \
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && \
     curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
-RUN docker-php-ext-install bcmath zip bz2 pdo pdo_pgsql simplexml opcache sockets mbstring pcntl xsl
+RUN docker-php-ext-install gd bcmath zip bz2 pdo pdo_pgsql simplexml opcache sockets mbstring pcntl xsl
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 
 #ADD php.ini /etc/php7/conf.d/
 #ADD php.ini /etc/php7/cli/conf.d/
