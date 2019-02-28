@@ -18,18 +18,14 @@ RUN apk update && apk upgrade \
     php7-intl \
     php7-mcrypt \
     php7-fileinfo \
-    php7-mbstring \
     php7-opcache \
     php7-openssl \
-    php7-pdo \
-    php7-pgsql \
     php7-xml \
     php7-phar \
     php7-tokenizer \
     php7-session \
     php7-simplexml \
     php7-xdebug \
-    php7-zip \
     php7-pear \
     postgresql-dev \
     freetype-dev \
@@ -39,6 +35,8 @@ RUN apk update && apk upgrade \
     bzip2-dev \
     libxml2-dev \
     libxslt-dev \
+    libzip-dev \
+    zip \
     git \
     bash \
     autoconf \
@@ -51,8 +49,10 @@ RUN apk update && apk upgrade \
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && \
     curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
-RUN docker-php-ext-install gd bcmath zip bz2 pdo pdo_pgsql simplexml opcache sockets mbstring pcntl xsl
+RUN docker-php-ext-install gd bcmath zip bz2 pdo pdo_pgsql simplexml opcache sockets mbstring pcntl xsl  
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure zip --with-libzip
+
 
 #ADD php.ini /etc/php7/conf.d/
 #ADD php.ini /etc/php7/cli/conf.d/
