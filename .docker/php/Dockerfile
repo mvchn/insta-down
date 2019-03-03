@@ -71,12 +71,12 @@ RUN cd xdebug-2.6.1 \
     && cp modules/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20170718 \
     && echo 'zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so' >> /usr/local/etc/php/php.ini \
     && echo 'zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so' >> /etc/php7/php.ini \
-    && echo 'xdebug.remote_enable=true' >> /etc/php7/php.ini \
-    && echo 'xdebug.remote_host=127.0.0.1' >> /etc/php7/php.ini \
-    && echo 'xdebug.idekey=\"PHPSTORM\"' >> /etc/php7/php.ini \
-    && echo 'xdebug.remote_port=9001' >> /etc/php7/php.ini \
-    && echo 'xdebug.remote_handler=dbgp' >> /etc/php7/php.ini \
-    && echo 'xdebug.max_nesting_level=512' >> /etc/php7/php.ini
+    && echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.remote_autostart=1' >>/usr/local/etc/php/php.ini \
+    && echo 'xdebug.coverage_enable=1' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.idekey=PHPSTORM' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.remote_port=9002' >> /usr/local/etc/php/php.ini  
 
 RUN adduser -D -g 'www' www \
     && chown -R www:www /app
