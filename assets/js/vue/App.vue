@@ -2,16 +2,16 @@
     <div id="main">
         <!--<Navbar></Navbar>-->
         <HeaderText></HeaderText>
-        <GoForm></GoForm>
+        <GetLinkForm></GetLinkForm>
     </div>
 </template>
 
 <script>
     import Navbar from "./Navbar";
     import HeaderText from "./HeaderText";
-    import GoForm from "./GoForm";
+    import GetLinkForm from "./GetLinkForm";
     export default {
         name: 'app',
-        components: {GoForm, HeaderText, Navbar},
+        components: {GetLinkForm, HeaderText, Navbar},
     }
 </script>

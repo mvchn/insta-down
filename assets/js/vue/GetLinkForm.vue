@@ -4,7 +4,7 @@
             <form @submit.prevent="postLink($data)">
                 <div class="row  justify-content-md-center">
                     <div class="col col-md-8">
-                        <input type="url" class="form-control form-control-lg" id="instLink"
+                        <input type="url" class="form-control form-control-lg" required id="instLink"
                                placeholder="https://instagram.com/xxxxx"  v-model="instLink">
                     </div>
                     <div class="col col-md-2">
