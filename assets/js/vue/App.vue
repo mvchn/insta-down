@@ -1,6 +1,6 @@
 <template>
     <div id="main">
-        <Navbar></Navbar>
+        <!--<Navbar></Navbar>-->
         <HeaderText></HeaderText>
         <GoForm></GoForm>
     </div>
