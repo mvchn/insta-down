@@ -26,11 +26,19 @@ class InstagramService
      */
     public function getBigImageByUrl(string $url)
     {
+        $url .= '?'. http_build_query(['__a'=> 1], null, '&');
         $httpRequest = $this->requestFactory->createRequest('get', $url);
         $resp = $this->httpClient->sendRequest($httpRequest);
-        $crawler = new Crawler($resp->getBody()->getContents());
-        $data = $crawler->filterXpath("//meta[@property='og:image']")->extract(['content']);
+        $result = json_decode($resp->getBody()->getContents());
 
-        return $data[0];
+        if(property_exists( $result, 'graphql') &&
+            property_exists($result->graphql, 'shortcode_media') &&
+            property_exists($result->graphql->shortcode_media, 'display_resources')) {
+            $imageUrl =  $result->graphql->shortcode_media->display_resources[2]->src;
+        }  else {
+            return null;
+        }
+        $imageUrl .= '&'.http_build_query(['dl'=> 1], null, '&');
+        return $imageUrl ;
     }
 }

@@ -34,9 +34,10 @@ class DefaultController extends AbstractController
     public function getLink(Request $request, InstagramService $instagramService) :JsonResponse
     {
         $url = $request->request->get('url');
+
         $result = $instagramService->getBigImageByUrl($url);
 
-        return $this->json(['link' => $result]);
+        return $this->json(['result' => $result]);
     }
 
 }

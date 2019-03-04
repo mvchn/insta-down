@@ -42,7 +42,8 @@
         data: () => ({
             instLink: null,
             downloadUrl: null,
-            loading: false
+            loading: false,
+            errors: []
         }),
         methods: {
             postLink() {
@@ -54,10 +55,12 @@
                     formData
                 )
                 .then(response => {
-                    this.downloadUrl = response.data.link;
+                    console.log(response.data);
+                    this.downloadUrl = response.data.result;
                 })
                 .catch(e => {
                     this.errors.push(e);
+                    console.log(e);
                 })
                 .finally(() => (this.loading = false));
             }
