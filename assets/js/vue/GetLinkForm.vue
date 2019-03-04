@@ -26,9 +26,8 @@
         <div class="container" v-else-if="loading">
             <div class="row justify-content-md-center">
                 <div class="col-md-2">
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"></div>
-                    </div>
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom"></i>
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
         </div>
