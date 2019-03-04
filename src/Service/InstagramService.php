@@ -2,33 +2,28 @@
 
 namespace App\Service;
 
-use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
-use Symfony\Component\DomCrawler\Crawler;
+use App\Client\InstagramHttpClient;
 
 class InstagramService
 {
-    private $requestFactory;
+    /** @var InstagramHttpClient */
+    private $client;
 
-    private $httpClient;
-
-    public function __construct(RequestFactory $requestFactory, HttpClient $httpClient)
+    public function __construct(InstagramHttpClient $client)
     {
-        $this->requestFactory = $requestFactory;
-        $this->httpClient = $httpClient;
+        $this->client = $client;
     }
 
     /**
-     * @param string $url
+     * @param string $uri
      * @throws \Http\Client\Exception
      *
      * @return string
      */
-    public function getBigImageByUrl(string $url)
+    public function getBigImageByUrl(string $uri)
     {
-        $url .= '?'. http_build_query(['__a'=> 1], null, '&');
-        $httpRequest = $this->requestFactory->createRequest('get', $url);
-        $resp = $this->httpClient->sendRequest($httpRequest);
+        $uri .= '?'. http_build_query(['__a'=> 1]);
+        $resp = $this->client->get($uri);
         $result = json_decode($resp->getBody()->getContents());
 
         if(property_exists( $result, 'graphql') &&
@@ -38,7 +33,7 @@ class InstagramService
         }  else {
             return null;
         }
-        $imageUrl .= '&'.http_build_query(['dl'=> 1], null, '&');
+        $imageUrl .= '&'.http_build_query(['dl'=> 1]);
         return $imageUrl ;
     }
 }
