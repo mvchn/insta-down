@@ -21,11 +21,13 @@ class InstagramHttpClient
 
     /**
      * @param string $uri
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \stdClass
      * @throws \Http\Client\Exception
      */
     public function get(string $uri)
     {
-        return $this->httpClient->get($uri);
+        $resp = $this->httpClient->get($uri) ;
+
+        return json_decode($resp->getBody()->getContents());
     }
 }

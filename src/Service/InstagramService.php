@@ -22,9 +22,7 @@ class InstagramService
      */
     public function getBigImageByUrl(string $uri)
     {
-        $uri .= '?'. http_build_query(['__a'=> 1]);
-        $resp = $this->client->get($uri);
-        $result = json_decode($resp->getBody()->getContents());
+        $result = $this->client->get($this->getJsonUri($uri));
 
         if(property_exists( $result, 'graphql') &&
             property_exists($result->graphql, 'shortcode_media') &&
@@ -33,7 +31,25 @@ class InstagramService
         }  else {
             return null;
         }
-        $imageUrl .= '&'.http_build_query(['dl'=> 1]);
-        return $imageUrl ;
+        
+        return $this->getDownloadUri($imageUrl) ;
+    }
+
+    /**
+     * @param string $uri
+     * @return string
+     */
+    public function getJsonUri(string $uri) : string
+    {
+        return $uri . '?' . http_build_query(['__a'=> 1]);
+    }
+
+    /**
+     * @param string $uri
+     * @return string
+     */
+    public function getDownloadUri(string $uri) : string
+    {
+        return $uri . '&' . http_build_query(['dl'=> 1]);
     }
 }
