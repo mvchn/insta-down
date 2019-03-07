@@ -2,34 +2,27 @@
 
 namespace App\Service;
 
-use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
-use Symfony\Component\DomCrawler\Crawler;
+use App\Client\InstagramHttpClient;
 
 class InstagramService
 {
-    private $requestFactory;
+    /** @var InstagramHttpClient */
+    private $client;
 
-    private $httpClient;
-
-    public function __construct(RequestFactory $requestFactory, HttpClient $httpClient)
+    public function __construct(InstagramHttpClient $client)
     {
-        $this->requestFactory = $requestFactory;
-        $this->httpClient = $httpClient;
+        $this->client = $client;
     }
 
     /**
-     * @param string $url
+     * @param string $uri
      * @throws \Http\Client\Exception
      *
      * @return string
      */
-    public function getBigImageByUrl(string $url)
+    public function getBigImageByUrl(string $uri)
     {
-        $url .= '?'. http_build_query(['__a'=> 1], null, '&');
-        $httpRequest = $this->requestFactory->createRequest('get', $url);
-        $resp = $this->httpClient->sendRequest($httpRequest);
-        $result = json_decode($resp->getBody()->getContents());
+        $result = $this->client->get($this->getJsonUri($uri));
 
         if(property_exists( $result, 'graphql') &&
             property_exists($result->graphql, 'shortcode_media') &&
@@ -38,7 +31,25 @@ class InstagramService
         }  else {
             return null;
         }
-        $imageUrl .= '&'.http_build_query(['dl'=> 1], null, '&');
-        return $imageUrl ;
+        
+        return $this->getDownloadUri($imageUrl) ;
+    }
+
+    /**
+     * @param string $uri
+     * @return string
+     */
+    public function getJsonUri(string $uri) : string
+    {
+        return $uri . '?' . http_build_query(['__a'=> 1]);
+    }
+
+    /**
+     * @param string $uri
+     * @return string
+     */
+    public function getDownloadUri(string $uri) : string
+    {
+        return $uri . '&' . http_build_query(['dl'=> 1]);
     }
 }
