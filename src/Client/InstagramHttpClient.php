@@ -24,7 +24,7 @@ class InstagramHttpClient
      * @return \stdClass
      * @throws \Http\Client\Exception
      */
-    public function get(string $uri)
+    public function get(string $uri): \stdClass
     {
         $resp = $this->httpClient->get($uri) ;
 

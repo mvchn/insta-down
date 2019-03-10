@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Client\InstagramHttpClient;
+use App\Exception\BadInstagramResponseException;
 
 class InstagramService
 {
@@ -17,22 +18,21 @@ class InstagramService
     /**
      * @param string $uri
      * @throws \Http\Client\Exception
+     * @throws BadInstagramResponseException
      *
      * @return string
      */
-    public function getBigImageByUrl(string $uri)
+    public function getBigImageByUrl(string $uri): string 
     {
         $result = $this->client->get($this->getJsonUri($uri));
 
         if(property_exists( $result, 'graphql') &&
             property_exists($result->graphql, 'shortcode_media') &&
             property_exists($result->graphql->shortcode_media, 'display_resources')) {
-            $imageUrl =  $result->graphql->shortcode_media->display_resources[2]->src;
-        }  else {
-            return null;
+            return $this->getDownloadUri($result->graphql->shortcode_media->display_resources[2]->src);
         }
-        
-        return $this->getDownloadUri($imageUrl) ;
+
+        throw new BadInstagramResponseException();
     }
 
     /**
