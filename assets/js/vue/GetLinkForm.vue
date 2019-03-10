@@ -1,7 +1,7 @@
 <template>
     <section class="text-center">
         <div class="container">
-            <form @submit.prevent="postLink($data)">
+            <form @submit.prevent="checkForm">
                 <div class="row  justify-content-md-center">
                     <div class="col col-md-8">
                         <input type="url" class="form-control form-control-lg" required id="instLink"
@@ -31,6 +31,20 @@
                 </div>
             </div>
         </div>
+        <div class="container" v-if="errors.length">
+            <div class="row justify-content-md-center">
+                <div class="col col-md-8">
+                    <div class="alert alert-dismissible fade show"
+                         v-bind:class="{ 'alert-warning': error.code === 400, 'alert-danger': error.code === 500 }"
+                         role="alert" v-for="error in errors">
+                        <strong>{{ error.message }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -45,23 +59,34 @@
             errors: []
         }),
         methods: {
-            postLink() {
+            checkForm: function (e) {
+                e.preventDefault();
+                this.downloadUrl = null;
+                this.errors = [];
                 var formData = new FormData();
                 formData.append("url", this.instLink);
-                this.loading = true;
-                this.downloadUrl = null;
-                axios.post('/get-link',
-                    formData
-                )
-                .then(response => {
-                    console.log(response.data);
-                    this.downloadUrl = response.data.result;
-                })
-                .catch(e => {
-                    this.errors.push(e);
-                    console.log(e);
-                })
-                .finally(() => (this.loading = false));
+                console.log(this.instLink);
+                if (!this.validUri(this.instLink)) {
+                    this.errors.push({'code': 400, 'message' : 'Bad Instagram url'});
+                } else {
+                    this.loading = true;
+                    axios.post('/get-link',
+                        formData
+                    )
+                    .then(response => {
+                        console.log(response.data);
+                        this.downloadUrl = response.data.result;
+                    })
+                    .catch(e => {
+                        this.errors.push({'code' :e.response.data.error.code, 'message':e.response.data.error.message});
+                        console.log(e.response);
+                    })
+                    .finally(() => (this.loading = false));
+                }
+            },
+            validUri: function (uri) {
+                var re = /(https?:\/\/www\.)?instagram\.com(\/p\/\w+\/?)/;
+                return re.test(uri);
             }
         }
     }
