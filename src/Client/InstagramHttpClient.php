@@ -2,32 +2,35 @@
 
 namespace App\Client;
 
+use App\Exception\BadInstagramResponseException;
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
 
 class InstagramHttpClient
 {
-    private $requestFactory;
-
     /** @var HttpMethodsClient  */
     private $httpClient;
 
-    public function __construct(RequestFactory $requestFactory, HttpClient $httpClient)
+    public function __construct(HttpClient $httpClient)
     {
-        $this->requestFactory = $requestFactory;
         $this->httpClient = $httpClient;
     }
 
     /**
      * @param string $uri
-     * @return \stdClass
+     * @return array
      * @throws \Http\Client\Exception
+     * @throws BadInstagramResponseException
      */
-    public function get(string $uri): \stdClass
+    public function getData(string $uri): array
     {
         $resp = $this->httpClient->get($uri) ;
 
-        return json_decode($resp->getBody()->getContents());
+        if (200 === $resp->getStatusCode()) {
+            return json_decode($resp->getBody()->getContents(), true);
+        }
+
+        throw new BadInstagramResponseException("Invalid url");
+
     }
 }

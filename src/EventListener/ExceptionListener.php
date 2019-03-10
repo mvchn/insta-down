@@ -18,6 +18,10 @@ class ExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
+        if (!$event->isMasterRequest()) {
+            return;
+        }
+        
         $exception = $event->getException();
 
         $code = $exception instanceof NetworkException ? 500 : 400;

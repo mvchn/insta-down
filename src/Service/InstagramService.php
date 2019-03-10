@@ -24,15 +24,13 @@ class InstagramService
      */
     public function getBigImageByUrl(string $uri): string 
     {
-        $result = $this->client->get($this->getJsonUri($uri));
+        $result = $this->client->getData($this->getJsonUri($uri));
 
-        if(property_exists( $result, 'graphql') &&
-            property_exists($result->graphql, 'shortcode_media') &&
-            property_exists($result->graphql->shortcode_media, 'display_resources')) {
-            return $this->getDownloadUri($result->graphql->shortcode_media->display_resources[2]->src);
+        if(!isset($result['graphql']['shortcode_media']['display_resources'][2]['src'])) {
+            throw new BadInstagramResponseException("No download content in response");
         }
 
-        throw new BadInstagramResponseException();
+        return $this->getDownloadUri($result['graphql']['shortcode_media']['display_resources'][2]['src']);
     }
 
     /**
