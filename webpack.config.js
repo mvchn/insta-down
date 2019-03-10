@@ -1,4 +1,12 @@
 var Encore = require('@symfony/webpack-encore');
+var webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin') ;
+const PurgecssPlugin = require('purgecss-webpack-plugin');
+const path = require('path');
+const glob = require('glob');
+const PATHS = {
+    src: path.join(__dirname, 'assets')
+};
 
 Encore
 // directory where compiled assets will be stored
@@ -44,8 +52,16 @@ Encore
     })
 
     .enableVueLoader()
+        
 // uncomment if you're having problems with a jQuery plugin
 //.autoProvidejQuery()
+
+    .addPlugin(new MiniCssExtractPlugin({
+        filename: "[name].css",
+    }))
+    .addPlugin(new PurgecssPlugin({
+        paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+    }))
 ;
 
 module.exports = Encore.getWebpackConfig();
