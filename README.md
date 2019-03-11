@@ -1,7 +1,7 @@
 Instagram content downloader
 ===========================
 
-Source code for instagram content donloader
+Source code for instagram content downloader
 
 ## Demo
 
