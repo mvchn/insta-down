@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="Downloader of instagram photos and videos">
+    <meta name="Keywords" content="instagram, download, photo, story, video">
     {% if ga_id %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id }}"></script>
     <script>
@@ -18,15 +21,12 @@
         {{ encore_entry_link_tags('app0') }}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
+
 </head>
 <body>
 <!-- ... -->
 
-{% block javascripts %}
-    <div id="app"></div>
-    {{ encore_entry_script_tags('app0') }}
-    {{ encore_entry_script_tags('app') }}
-{% endblock %}
+
 {% block body %}
 {% endblock body %}
 </body>
