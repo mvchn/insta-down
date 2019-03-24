@@ -5,7 +5,7 @@
                 <div class="row  justify-content-md-center">
                     <div class="col col-md-8">
                         <input type="url" class="form-control form-control-lg" required id="instLink"
-                               placeholder="https://instagram.com/xxxxx"  v-model="instLink">
+                               placeholder="https://www.instagram.com/p/BsOGulcndj-/"  v-model="instLink">
                     </div>
                     <div class="col col-md-2">
                         <button type="submit" class="btn btn-primary btn-lg btn-block">Go!</button>
